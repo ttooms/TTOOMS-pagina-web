@@ -320,6 +320,10 @@
       var r = await sb.rpc('guardar_correo_envio', { usuario: usuario, clave_app: clave, nombre: nombre });
       if (r.error) throw r.error;
     },
+    async guardarBrevo(clave, correo, nombre) {
+      var r = await sb.rpc('guardar_brevo', { clave_api: clave, correo: correo, nombre: nombre });
+      if (r.error) throw r.error;
+    },
     async correosLog() {
       var r = await sb.from('correos_log').select('*').order('enviado_en', { ascending: false }).limit(25);
       if (r.error) throw r.error; return r.data || [];
@@ -407,6 +411,7 @@
     },
     async estadoCorreo() { return demo.smtp ? { configurado: true, usuario: demo.smtp } : { configurado: false }; },
     async guardarCorreo(u) { demo.smtp = u; demoSave(); },
+    async guardarBrevo(k, u) { demo.smtp = u + ' (Brevo)'; demoSave(); },
     async correosLog() {
       return (demo.correos || []).slice(0, 25).map(function (c, i) {
         return { id: i, tipo: c.tipo || 'correo', para: Array.isArray(c.para) ? c.para.join(', ') : (c.para || ''), asunto: c.asunto || c.tipo, ok: true, enviado_en: c.fecha };
@@ -2041,22 +2046,35 @@
       try { log = await api.correosLog(); } catch (e) { }
       try { gente3 = await api.perfiles(); } catch (e) { }
       var conAlerta3 = gente3.filter(function (u) { return u.rol !== 'admin' && u.alertas && u.alertas.nuevas; });
-      var pasos = '<ol style="margin:8px 0 0; padding-left:20px; color:var(--ink-2); font-size:14.5px; line-height:1.7">' +
-        '<li>Entrá a <a href="https://myaccount.google.com/security" target="_blank" rel="noopener"><b>myaccount.google.com/security</b></a> con la cuenta de Gmail del negocio.</li>' +
-        '<li>Activá la <b>Verificación en 2 pasos</b> (si ya está activa, seguí).</li>' +
-        '<li>Abrí <a href="https://myaccount.google.com/apppasswords" target="_blank" rel="noopener"><b>Contraseñas de aplicaciones</b></a>, escribí el nombre <b>Ttoms web</b> y tocá Crear.</li>' +
-        '<li>Google te muestra 16 letras. Copialas y pegalas aquí abajo.</li></ol>';
+      var ol = function (items) { return '<ol style="margin:8px 0 0; padding-left:20px; color:var(--ink-2); font-size:14.5px; line-height:1.7">' + items.map(function (x) { return '<li>' + x + '</li>'; }).join('') + '</ol>'; };
+      var pasosBrevo = ol([
+        'Creá una cuenta gratis en <a href="https://app.brevo.com/account/register" target="_blank" rel="noopener"><b>brevo.com</b></a> con el correo del negocio y confirmalo.',
+        'En Brevo abrí <a href="https://app.brevo.com/senders/list" target="_blank" rel="noopener"><b>Remitentes</b></a> y agregá ese mismo correo como remitente (te llega un código para verificarlo).',
+        'Abrí <a href="https://app.brevo.com/settings/keys/api" target="_blank" rel="noopener"><b>Claves API</b></a>, tocá <b>Generar una nueva clave API</b>, ponele de nombre <b>Ttoms web</b> y copiala (empieza con <span class="mono">xkeysib-</span>).',
+        'Pegala aquí abajo.']);
+      var pasosGmail = ol([
+        'Entrá a <a href="https://myaccount.google.com/signinoptions/two-step-verification" target="_blank" rel="noopener"><b>Verificación en 2 pasos</b></a> con el Gmail del negocio y activala. <b>Sin esto, Google no muestra la opción de contraseñas de aplicación.</b>',
+        'Después abrí <a href="https://myaccount.google.com/apppasswords" target="_blank" rel="noopener"><b>Contraseñas de aplicaciones</b></a>, escribí <b>Ttoms web</b> y tocá Crear.',
+        'Google te muestra 16 letras. Pegalas aquí abajo.']);
       body.innerHTML =
         (ec.configurado
-          ? '<div class="trust"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg><div><strong>Los correos están activados</strong><span>Salen desde <b>' + esc(ec.usuario) + '</b>. Gmail permite unos 500 por día.</span></div></div>' +
-            '<div class="row-btns" style="margin-top:0"><button class="btn" type="button" id="mailTest">Mandarme un correo de prueba</button><button class="btn ghost" type="button" id="mailChange">Cambiar la cuenta</button></div>'
-          : '<div><h3 style="font-size:18px">Activar los correos automáticos</h3><p style="color:var(--ink-2); font-size:14.5px; margin-top:6px">Los correos salen desde su propio Gmail, gratis. Google pide una “contraseña de aplicación” (distinta de la contraseña normal) para que la web pueda enviar en su nombre.</p>' + pasos + '</div>') +
-        '<form class="form-grid" id="mailForm"' + (ec.configurado ? ' hidden' : '') + ' novalidate>' +
+          ? '<div class="trust"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"/></svg><div><strong>Los correos están activados</strong><span>Salen desde <b>' + esc(ec.usuario) + '</b> con ' + esc(ec.proveedor || 'Gmail') + '. ' + (ec.proveedor === 'Brevo' ? 'Brevo permite 300 por día gratis.' : 'Gmail permite unos 500 por día.') + '</span></div></div>' +
+            '<div class="row-btns" style="margin-top:0"><button class="btn" type="button" id="mailTest">Mandarme un correo de prueba</button><button class="btn ghost" type="button" id="mailChange">Cambiar la forma de envío</button></div>'
+          : '<div><h3 style="font-size:18px">Activar los correos automáticos</h3><p style="color:var(--ink-2); font-size:14.5px; margin-top:6px">Elegí una de las dos formas. Las dos son gratis.</p></div>') +
+        '<div id="mailSetup"' + (ec.configurado ? ' hidden' : '') + ' style="display:grid; gap:14px">' +
+        '<div class="seg small" id="mailOpt" role="tablist" style="justify-self:start"><button type="button" role="tab" aria-selected="true" data-m="brevo" style="background:var(--night); color:var(--mint)">Brevo (sin contraseña de aplicación)</button><button type="button" role="tab" aria-selected="false" data-m="gmail">Gmail</button></div>' +
+        '<form class="form-grid" id="brevoForm" novalidate><div class="form-field full">' + pasosBrevo + '</div>' +
+        '<div class="form-field"><label for="bvUser">Correo remitente (el que verificaste en Brevo)</label><input id="bvUser" type="email" value="' + esc(ec.usuario || (perfil && perfil.correo) || '') + '"></div>' +
+        '<div class="form-field"><label for="bvName">Nombre que ve el cliente</label><input id="bvName" value="' + esc(CFG.marca || 'Ttoms') + '"></div>' +
+        '<div class="form-field full"><label for="bvKey">Clave API de Brevo</label><input id="bvKey" type="password" autocomplete="off" placeholder="xkeysib-…"><span class="hint">Se guarda en el servidor, en un lugar que nadie puede leer desde la web: ni desde este panel se vuelve a ver, solo se reemplaza.</span></div>' +
+        '<div class="full" id="bvErr"></div>' +
+        '<div class="form-field full"><button class="btn block" type="submit">Guardar y mandar un correo de prueba</button></div></form>' +
+        '<form class="form-grid" id="mailForm" hidden novalidate><div class="form-field full">' + pasosGmail + '</div>' +
         '<div class="form-field"><label for="mUser">Gmail del negocio</label><input id="mUser" type="email" value="' + esc(ec.usuario || (perfil && perfil.correo) || '') + '"></div>' +
         '<div class="form-field"><label for="mName">Nombre que ve el cliente</label><input id="mName" value="' + esc(CFG.marca || 'Ttoms') + '"></div>' +
         '<div class="form-field full"><label for="mPass">Contraseña de aplicación (16 letras)</label><input id="mPass" type="password" autocomplete="off" placeholder="abcd efgh ijkl mnop"><span class="hint">Se guarda en el servidor, en un lugar que nadie puede leer desde la web: ni desde este panel se vuelve a ver, solo se reemplaza.</span></div>' +
         '<div class="full" id="mErr"></div>' +
-        '<div class="form-field full"><button class="btn block" type="submit">Guardar y mandar un correo de prueba</button></div></form>' +
+        '<div class="form-field full"><button class="btn block" type="submit">Guardar y mandar un correo de prueba</button></div></form></div>' +
         '<div><p class="eyebrow" style="margin:8px 0 9px">Qué se envía solo</p><ul style="margin:0; padding-left:20px; color:var(--ink-2); font-size:14px; line-height:1.7">' +
         '<li>Confirmación de cada pedido al comprador (lo exige la Ley de Protección al Consumidor, art. 21-B) y aviso a ustedes.</li>' +
         '<li>Comprobante con serie y garantía cuando marcan un pedido como entregado.</li>' +
@@ -2075,18 +2093,33 @@
             '<span class="pill ' + (l.ok ? 'ok' : 'bad') + '">' + (l.ok ? 'enviado' : 'falló') + '</span></div>';
         }).join('') : '<div class="empty" style="padding:24px">Todavía no se ha enviado ningún correo.</div>') + '</div></div>';
 
+      $('#mailOpt', modal).addEventListener('click', function (e) {
+        var b = e.target.closest('[data-m]'); if (!b) return;
+        $$('#mailOpt button', modal).forEach(function (x) { var on = x === b; x.setAttribute('aria-selected', on ? 'true' : 'false'); x.style.background = on ? 'var(--night)' : ''; x.style.color = on ? 'var(--mint)' : ''; });
+        $('#brevoForm', modal).hidden = b.dataset.m !== 'brevo';
+        $('#mailForm', modal).hidden = b.dataset.m !== 'gmail';
+      });
+      $('#brevoForm', modal).addEventListener('submit', async function (e) {
+        e.preventDefault();
+        var u = $('#bvUser', modal).value.trim(), k = $('#bvKey', modal).value.trim(), err = $('#bvErr', modal);
+        if (!validEmail(u)) { err.innerHTML = '<p class="err">Escribí el correo que verificaste como remitente en Brevo.</p>'; return; }
+        if (k.indexOf('xkeysib-') !== 0) { err.innerHTML = '<p class="err">La clave API de Brevo empieza con xkeysib-. Revisá que copiaste la clave API (no la clave SMTP).</p>'; return; }
+        var btn = $('button[type=submit]', this); busy(btn, true, 'Guardando…');
+        try { await api.guardarBrevo(k, u, $('#bvName', modal).value.trim() || 'Ttoms'); $('#bvKey', modal).value = ''; await probar(btn); }
+        catch (e2) { busy(btn, false); err.innerHTML = '<p class="err">' + esc(traducir(e2)) + '</p>'; }
+      });
       var probar = async function (btn) {
         busy(btn, true, 'Enviando prueba…');
         try {
           var r = await api.notificar('prueba');
           busy(btn, false);
           if (r && r.ok) toast('Listo: revisá tu bandeja de entrada (' + (perfil && perfil.correo) + ').');
-          else toast(r && r.motivo === 'sin-configurar' ? 'Primero guardá la cuenta de Gmail.' : 'Gmail no aceptó el envío. Revisá la contraseña de aplicación (abajo sale el error).');
+          else toast(r && r.motivo === 'sin-configurar' ? 'Primero guardá la forma de envío.' : 'El envío falló. Abajo, en Últimos envíos, sale el motivo.');
           pintarAdmin('correos');
         } catch (e) { busy(btn, false); toast('No se pudo enviar: ' + traducir(e)); }
       };
       if ($('#mailTest', modal)) $('#mailTest', modal).addEventListener('click', function () { probar(this); });
-      if ($('#mailChange', modal)) $('#mailChange', modal).addEventListener('click', function () { $('#mailForm', modal).hidden = false; this.hidden = true; });
+      if ($('#mailChange', modal)) $('#mailChange', modal).addEventListener('click', function () { $('#mailSetup', modal).hidden = false; this.hidden = true; });
       $('#mailForm', modal).addEventListener('submit', async function (e) {
         e.preventDefault();
         var u = $('#mUser', modal).value.trim(), pw = $('#mPass', modal).value.replace(/\s/g, ''), err = $('#mErr', modal);

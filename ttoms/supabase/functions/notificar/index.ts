@@ -83,20 +83,44 @@ ${b.imagen ? `<tr><td style="padding:0"><img src="${esc(b.imagen)}" alt="" width
 
 // ---------------- envío ----------------
 async function transporte() {
-  let cfg: Record<string, unknown> | null = null;
   const u = Deno.env.get('SMTP_USER'), p = Deno.env.get('SMTP_PASS');
+  let cfg: Record<string, unknown> | null = null, tipo = 'smtp';
   if (u && p) cfg = { host: Deno.env.get('SMTP_HOST') ?? 'smtp.gmail.com', port: Number(Deno.env.get('SMTP_PORT') ?? 465), user: u, pass: p, nombre: MARCA };
   else {
-    const r = await db.from('privado').select('valor').eq('clave', 'smtp').maybeSingle();
-    cfg = (r.data?.valor as Record<string, unknown>) ?? null;
+    const r = await db.from('privado').select('clave, valor').in('clave', ['smtp', 'brevo']).order('editado_en', { ascending: false }).limit(1);
+    const fila = (r.data || [])[0];
+    if (fila) { cfg = fila.valor as Record<string, unknown>; tipo = fila.clave; }
   }
-  if (!cfg?.user || !cfg?.pass) return null;
+  if (!cfg?.user) return null;
+  const nombre = String(cfg.nombre ?? MARCA).replace(/"/g, '');
+  const de = `"${nombre}" <${cfg.user}>`;
+
+  // Brevo: API por HTTPS, solo necesita una clave (sin contraseña de aplicación).
+  if (tipo === 'brevo') {
+    if (!cfg.key) return null;
+    const correo = (x: string) => { const m = /<([^>]+)>/.exec(x); return (m ? m[1] : x).trim(); };
+    const lista = (x: unknown) => ([] as string[]).concat((x as string[] | string) || []).filter(Boolean).map((e) => ({ email: correo(e) }));
+    const t = {
+      sendMail: async (m: { to?: unknown; bcc?: unknown; subject: string; html: string; replyTo?: string }) => {
+        const body: Record<string, unknown> = { sender: { name: nombre, email: String(cfg!.user) }, to: lista(m.to), subject: m.subject, htmlContent: m.html };
+        if (m.bcc) body.bcc = lista(m.bcc);
+        if (m.replyTo) body.replyTo = { email: correo(m.replyTo) };
+        const r = await fetch('https://api.brevo.com/v3/smtp/email', {
+          method: 'POST', headers: { 'api-key': String(cfg!.key), 'content-type': 'application/json', accept: 'application/json' }, body: JSON.stringify(body)
+        });
+        if (!r.ok) throw new Error(`Brevo respondió ${r.status}: ${(await r.text()).slice(0, 300)}`);
+      }
+    };
+    return { t, de, cuenta: `${cfg.user} (Brevo)` };
+  }
+
+  if (!cfg.pass) return null;
   const port = Number(cfg.port ?? 465);
   const t = nodemailer.createTransport({
     host: String(cfg.host ?? 'smtp.gmail.com'), port, secure: port === 465,
     auth: { user: String(cfg.user), pass: String(cfg.pass) }
   });
-  return { t, de: `"${String(cfg.nombre ?? MARCA).replace(/"/g, '')}" <${cfg.user}>`, cuenta: String(cfg.user) };
+  return { t, de, cuenta: String(cfg.user) };
 }
 
 type Tx = NonNullable<Awaited<ReturnType<typeof transporte>>>;

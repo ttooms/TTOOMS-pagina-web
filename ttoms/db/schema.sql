@@ -775,6 +775,42 @@ end;
 $$;
 revoke execute on function public.al_cambiar_orden() from public, anon, authenticated;
 
+-- ------------------------------------------------------------
+-- 20. Correos con Brevo (alternativa a la contraseña de aplicación de Gmail)
+-- ------------------------------------------------------------
+create or replace function public.guardar_brevo(clave_api text, correo text, nombre text default 'Ttoms')
+returns void
+language plpgsql
+security definer set search_path = public
+as $$
+begin
+  if not public.es_admin() then raise exception 'No autorizado'; end if;
+  if correo !~* '^[^@\s]+@[^@\s]+\.[a-z]{2,}$' then raise exception 'Correo no válido'; end if;
+  if coalesce(clave_api, '') !~ '^xkeysib-' then raise exception 'La clave de Brevo empieza con xkeysib-'; end if;
+  insert into public.privado (clave, valor, editado_en)
+  values ('brevo', jsonb_build_object('key', trim(clave_api), 'user', lower(trim(correo)),
+    'nombre', coalesce(nullif(trim(nombre), ''), 'Ttoms')), now())
+  on conflict (clave) do update set valor = excluded.valor, editado_en = now();
+  delete from public.privado where clave = 'smtp';
+end;
+$$;
+revoke execute on function public.guardar_brevo(text, text, text) from public, anon;
+grant execute on function public.guardar_brevo(text, text, text) to authenticated;
+
+create or replace function public.estado_correo()
+returns json
+language sql
+stable
+security definer set search_path = public
+as $$
+  select case when public.es_admin() then
+    coalesce((select json_build_object('configurado', true, 'usuario', valor->>'user', 'proveedor',
+                case clave when 'brevo' then 'Brevo' else 'Gmail' end, 'editado_en', editado_en)
+              from public.privado where clave in ('smtp','brevo') order by editado_en desc limit 1),
+             json_build_object('configurado', false))
+  else null end;
+$$;
+
 -- ============================================================
 -- ÚLTIMO PASO — HACERSE ADMINISTRADORES (los dos)
 -- Cada uno se registra primero en el sitio con su correo.

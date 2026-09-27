@@ -109,8 +109,11 @@ No usen videos de otras personas de YouTube o TikTok.
 
 ## Correos automáticos
 
-La función `notificar` ya está publicada en Supabase. Envía desde el Gmail del
-negocio con una **contraseña de aplicación** de Google (se crea en
+La función `notificar` ya está publicada en Supabase. Hay dos formas de envío,
+se elige en Panel → **Correos**:
+
+- **Brevo** (brevo.com, gratis, 300 por día): solo pide una clave API.
+- **Gmail**: con una **contraseña de aplicación** de Google (se crea en
 myaccount.google.com/apppasswords con la verificación en 2 pasos activa).
 Se pega una sola vez en Panel → **Correos**; desde ahí mismo se manda una prueba
 y se ve el registro de envíos. Gmail permite unos 500 correos por día.
