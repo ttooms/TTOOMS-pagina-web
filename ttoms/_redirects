@@ -1,0 +1,7 @@
+# Enlace propio de cada consola (la función "consola" pone la vista previa)
+/c/*          /index.html   200
+# Archivos internos que no deben verse en la web
+/db/*         /404.html     404!
+/supabase/*   /404.html     404!
+/netlify/*    /404.html     404!
+/README.md    /404.html     404!

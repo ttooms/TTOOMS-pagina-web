@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /comprobante.html
+Disallow: /acta.html
+
+Sitemap: https://ttoms.netlify.app/sitemap.xml

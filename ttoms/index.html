@@ -4,15 +4,24 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ttoms — Compra y venta de consolas en El Salvador</title>
-<meta name="description" content="Consolas y accesorios revisados, con garantía de 15 días y entrega en San Salvador: la probás antes de pagar. También compramos la tuya.">
-<meta property="og:title" content="Ttoms — Consolas en El Salvador">
-<meta property="og:description" content="Compra y venta de consolas y accesorios en San Salvador. La probás antes de pagar y te cotizamos la tuya el mismo día.">
+<meta name="description" content="Consolas y accesorios revisados en San Salvador: la probás antes de pagar. También compramos la tuya.">
+<meta property="og:title" content="Ttoms — Consolas en San Salvador">
+<meta property="og:description" content="Compra y venta de consolas revisadas, con serie verificada. La probás antes de pagar y te cotizamos la tuya el mismo día.">
 <meta property="og:type" content="website">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='1' y='1' width='30' height='30' rx='9' fill='%232E6B5E'/><path d='M8 11h11M13.5 11v11' stroke='%23F3F8F6' stroke-width='2.4' stroke-linecap='round'/></svg>">
+<meta property="og:url" content="https://ttoms.netlify.app/">
+<meta property="og:image" content="https://ttoms.netlify.app/assets/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="es_SV">
+<meta property="og:site_name" content="Ttoms">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://ttoms.netlify.app/">
+<meta name="theme-color" content="#0F1A17">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect x='1' y='1' width='30' height='30' rx='9' fill='%230F1A17'/><path d='M8 11h11M13.5 11v11' stroke='%238FE3C8' stroke-width='2.6' stroke-linecap='round'/><circle cx='22.5' cy='20' r='2.6' fill='%23E8A765'/></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
-<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/assets/styles.css">
 </head>
 <body>
 
@@ -20,27 +29,31 @@
   Modo demostración: los datos viven solo en este navegador. Conectá Supabase en <b>assets/config.js</b> para activar usuarios reales.
 </div>
 
+<div class="ticker" aria-label="Anuncios">
+  <div class="ticker-track" id="ticker"></div>
+</div>
+
 <header class="site">
   <div class="wrap bar">
-    <a class="brand" href="#top">
+    <a class="brand" href="#top" aria-label="Ttoms, inicio">
       <svg class="mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-        <rect x="1.2" y="1.2" width="29.6" height="29.6" rx="9" stroke="currentColor" stroke-width="1.6" style="color:var(--accent)"/>
-        <path d="M8 11h11M13.5 11v11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="color:var(--accent)"/>
-        <circle cx="22" cy="20" r="2.4" fill="currentColor" style="color:var(--signal)"/>
+        <rect x="1" y="1" width="30" height="30" rx="9" fill="var(--night)"/>
+        <path d="M8 11h11M13.5 11v11" stroke="var(--mint)" stroke-width="2.6" stroke-linecap="round"/>
+        <circle cx="22.5" cy="20" r="2.6" fill="var(--amber)"/>
       </svg>
-      <b>Ttoms</b><span>SV</span>
+      <b>Ttoms</b>
     </a>
-    <nav class="main" id="nav">
-      <a href="#catalogo">Comprar</a>
-      <a href="#vender">Vendenos tu consola</a>
-      <a href="#entregas">Entregas</a>
-      <a href="#resenas">Reseñas</a>
-      <a href="#faq">Ayuda</a>
+
+    <nav class="tabnav" id="nav" aria-label="Secciones">
+      <span class="tabnav-glide" id="navGlide" aria-hidden="true"></span>
+      <a href="#catalogo" data-spy="catalogo">Tienda</a>
+      <a href="#vender" data-spy="vender">Vendé la tuya</a>
+      <a href="#entregas" data-spy="entregas">Entregas</a>
+      <a href="#resenas" data-spy="resenas">Reseñas</a>
+      <a href="#faq" data-spy="faq">Ayuda</a>
     </nav>
+
     <div class="bar-right">
-      <button class="icon-btn sq menu-toggle" id="menuBtn" aria-label="Menú" aria-expanded="false">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
-      </button>
       <a class="icon-btn sq hide-sm" id="fbTop" href="#" target="_blank" rel="noopener" aria-label="Ttoms en Facebook">
         <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 9V7.2c0-.8.2-1.2 1.4-1.2H17V3.1C16.6 3 15.6 3 14.5 3 12 3 10.4 4.5 10.4 7v2H8v3.2h2.4V21H14v-8.8h2.5l.4-3.2H14Z"/></svg>
       </a>
@@ -50,12 +63,12 @@
       <button class="icon-btn sq" id="themeBtn" aria-label="Cambiar tema">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z" stroke-linejoin="round"/></svg>
       </button>
-      <button class="icon-btn" id="chatBtn">
+      <button class="icon-btn hide-sm" id="chatBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-12.3 7.6L3 20.5l1.5-5.2A8.5 8.5 0 1 1 21 11.5Z"/></svg>
-        <span class="hide-sm">Chat</span>
+        <span>Chat</span>
         <span class="badge-dot" id="chatCount" hidden>0</span>
       </button>
-      <button class="icon-btn" id="accountBtn">
+      <button class="icon-btn solid" id="accountBtn">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg>
         <span id="accountLabel">Ingresar</span>
       </button>
@@ -64,98 +77,100 @@
 </header>
 
 <main id="top">
+
+  <!-- ============ HERO ============ -->
   <section class="hero">
-    <div class="ambient" aria-hidden="true"><i></i><i></i><i></i></div>
-    <div class="hero-media" id="heroMedia" hidden aria-hidden="true"></div>
+    <div class="hero-bg" aria-hidden="true">
+      <div class="glow g1"></div><div class="glow g2"></div>
+      <div class="floaters" id="floaters"></div>
+      <div class="hero-media" id="heroMedia" hidden></div>
+      <div class="grain"></div>
+    </div>
     <div class="wrap hero-grid">
-      <div>
-        <p class="eyebrow">Consolas y accesorios · San Salvador</p>
-        <h1>Compramos y vendemos consolas, <em>y la probás antes de pagar</em>.</h1>
-        <p class="lead">Somos dos personas en San Salvador revisando cada consola que publicamos. Nos vemos en un punto conocido, la encendés frente a nosotros y pagás hasta que estás conforme. También compramos la tuya.</p>
-        <div class="searchrow">
-          <div class="search">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5" stroke-linecap="round"/></svg>
-            <input id="q" type="search" placeholder="Buscá: PS5, Switch OLED, control DualSense…" aria-label="Buscar consolas y accesorios">
-          </div>
-          <a class="btn" href="#catalogo">Ver catálogo</a>
+      <div class="hero-copy">
+        <span class="pill-tag"><span class="live-dot"></span>Entregas en San Salvador</span>
+        <h1>Consolas revisadas.<br><span class="hl">Las probás antes de pagar.</span></h1>
+        <p class="lead">Somos dos personas en San Salvador que compran, revisan y venden consolas con serie verificada. Nos vemos en un punto conocido, la encendés frente a nosotros y pagás cuando estás conforme.</p>
+        <div class="hero-ctas">
+          <a class="btn lg" href="#catalogo">Ver consolas
+            <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <a class="btn lg light" href="#vender">Vendenos la tuya</a>
         </div>
-        <div class="chips" id="quickCats" role="group" aria-label="Categorías rápidas"></div>
+        <ul class="hero-stats" id="heroStats">
+          <li id="statVentas"><b>15 días</b><span>de garantía</span></li>
+          <li><b id="statPuntos">6</b><span>puntos de entrega</span></li>
+          <li><b>24 h</b><span>para cotizar la tuya</span></li>
+        </ul>
       </div>
-      <aside class="hero-card">
-        <p class="eyebrow">Cómo es una compra</p>
-        <h3 style="margin-top:6px">Sin pagar a ciegas</h3>
-        <ol class="flowline">
-          <li><span class="n">1</span><div><strong>Apartás la consola</strong><span>Desde el sitio, sin pagar nada todavía.</span></div></li>
-          <li><span class="n">2</span><div><strong>Acordamos por chat</strong><span>Día, hora y punto de entrega en San Salvador.</span></div></li>
-          <li><span class="n">3</span><div><strong>La probás en persona</strong><span>Enciende, corre un juego, revisás controles y accesorios.</span></div></li>
-          <li><span class="n">4</span><div><strong>Pagás si estás conforme</strong><span>Efectivo o transferencia ahí mismo. Si no te convence, no pasa nada.</span></div></li>
-        </ol>
-      </aside>
+      <div class="hero-feature" id="heroFeature" aria-live="polite"></div>
     </div>
   </section>
 
-  <section class="trust">
-    <div class="wrap trust-in">
-      <div>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 3 4.5 6v6c0 4.4 3.1 8.2 7.5 9 4.4-.8 7.5-4.6 7.5-9V6L12 3Z"/><path d="m9 12 2.2 2.2L15.5 10" stroke-linecap="round"/></svg>
-        <strong>Probás antes de pagar</strong><span>En las entregas en persona, pagás hasta que la revisaste.</span>
-      </div>
-      <div>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M12 21s7-5.4 7-11a7 7 0 1 0-14 0c0 5.6 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
-        <strong>Entregas en San Salvador</strong><span>Gasolineras y plazas conocidas. Fuera de San Salvador, por chat.</span>
-      </div>
-      <div>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M4 7h16v11H4z"/><path d="M8 7V5h8v2M9 12h6" stroke-linecap="round"/></svg>
-        <strong>Prueba de encendido</strong><span>Toda consola se enciende y se prueba antes de entregarla.</span>
-      </div>
-      <div>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2" stroke-linecap="round"/></svg>
-        <strong>Garantía de 15 días</strong><span>En toda consola vendida por Ttoms.</span>
-      </div>
-    </div>
-  </section>
+  <!-- ============ CINTA DE CONFIANZA ============ -->
+  <div class="belt" aria-hidden="true"><div class="belt-track" id="belt"></div></div>
 
-  <section class="catalog wrap" id="catalogo">
+  <!-- ============ ELEGÍ TU CONSOLA ============ -->
+  <section class="wrap section" id="consolas">
     <div class="sec-head">
       <div>
-        <h2>Catálogo</h2>
-        <p>Inventario disponible, revisado pieza por pieza. Precios en dólares.</p>
+        <p class="eyebrow">Elegí tu consola</p>
+        <h2>¿Con qué querés jugar?</h2>
       </div>
-      <button class="btn ghost sm" type="button" id="adminShortcut" hidden>Panel de administrador</button>
+    </div>
+    <div class="tiles" id="catTiles"></div>
+  </section>
+
+  <!-- ============ RECIÉN LLEGADAS ============ -->
+  <section class="wrap section" id="nuevas" hidden>
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">Recién llegadas</p>
+        <h2>Lo último que revisamos</h2>
+      </div>
+      <div class="rail-ctrl">
+        <button class="round-btn" type="button" data-rail="-1" aria-label="Anterior"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <button class="round-btn" type="button" data-rail="1" aria-label="Siguiente"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
+    </div>
+    <div class="rail" id="newRail"></div>
+  </section>
+
+  <!-- ============ CATÁLOGO ============ -->
+  <section class="wrap section" id="catalogo">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">Tienda</p>
+        <h2>Todo el catálogo</h2>
+      </div>
+      <button class="btn sm amber" type="button" id="adminShortcut" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+        Panel <span class="count-badge" id="adminBadge" hidden>0</span>
+      </button>
     </div>
 
-    <div class="filters">
-      <div class="field"><label for="fCat">Categoría</label>
-        <select id="fCat">
-          <option value="todas">Todas</option>
-          <option value="PlayStation">PlayStation</option>
-          <option value="Xbox">Xbox</option>
-          <option value="Nintendo">Nintendo</option>
-          <option value="Portátil">Portátil</option>
-          <option value="Retro">Retro</option>
-          <option value="Accesorios">Accesorios</option>
-        </select>
+    <div class="seg-wrap">
+      <div class="seg" id="catTabs" role="tablist" aria-label="Categorías">
+        <span class="seg-glide" id="catGlide" aria-hidden="true"></span>
       </div>
-      <div class="field"><label for="fGrade">Estado</label>
-        <select id="fGrade">
-          <option value="todas">Cualquiera</option>
-          <option value="S">S — como nueva</option>
-          <option value="A">A — muy buena</option>
-          <option value="B">B — buena</option>
-          <option value="C">C — con marcas de uso</option>
-        </select>
-      </div>
-      <div class="field"><label for="fMax">Hasta</label>
-        <input id="fMax" type="range" min="20" max="800" step="10" value="800" aria-label="Precio máximo">
-        <span class="price-out mono" id="fMaxOut">$800</span>
-      </div>
-      <div class="field"><label for="fSort">Orden</label>
-        <select id="fSort">
-          <option value="recientes">Más recientes</option>
-          <option value="baratas">Precio: menor a mayor</option>
-          <option value="caras">Precio: mayor a menor</option>
-        </select>
-      </div>
+    </div>
+
+    <div class="toolbar">
+      <label class="search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5" stroke-linecap="round"/></svg>
+        <input id="q" type="search" placeholder="Buscá: PS5, Switch OLED, DualSense…" aria-label="Buscar">
+      </label>
+      <select id="fGrade" aria-label="Estado">
+        <option value="todas">Grado: todos</option>
+        <option value="S">Grado S · como nueva</option>
+        <option value="A">Grado A · muy buena</option>
+        <option value="B">Grado B · buena</option>
+        <option value="C">Grado C · con marcas</option>
+      </select>
+      <select id="fSort" aria-label="Orden">
+        <option value="recientes">Más recientes</option>
+        <option value="baratas">Menor precio</option>
+        <option value="caras">Mayor precio</option>
+      </select>
       <span class="count" id="count"></span>
     </div>
 
@@ -164,20 +179,63 @@
     </div>
   </section>
 
-  <section class="sell wrap" id="vender">
-    <div class="sell-grid">
+  <!-- ============ GRADOS ============ -->
+  <section class="wrap section" id="grados">
+    <div class="sec-head">
       <div>
-        <p class="eyebrow">Vendenos tu consola</p>
-        <h2 style="font-size:27px; margin-top:6px">Te cotizamos hoy mismo</h2>
-        <p style="color:var(--ink-2); margin-top:12px; font-size:15.5px; max-width:44ch">Contanos qué tenés y en qué estado está. Revisamos la oferta, te respondemos con un precio y, si aceptás, coordinamos la revisión y te pagamos al entregar.</p>
-        <div class="fee"><span>Respuesta a tu oferta</span><b>Menos de 24 h</b></div>
-        <div class="fee" style="background:var(--surface-2)"><span>Formas de pago al vendedor</span><b>Efectivo o transferencia</b></div>
-        <div class="note" style="margin-top:16px">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01" stroke-linecap="round"/></svg>
-          <span>Mientras más detalles des sobre accesorios, caja y marcas de uso, más cerca queda la cotización del precio final.</span>
-        </div>
+        <p class="eyebrow">Grados</p>
+        <h2>Así calificamos el estado</h2>
+        <p class="sub">Todas funcionan al 100%. El grado habla solo de lo estético, y nunca lo subimos para vender más rápido.</p>
       </div>
-      <form id="sellForm" novalidate>
+    </div>
+    <div class="grades">
+      <article class="grade-card" data-g="S"><span class="big">S</span><h3>Como nueva</h3><p>Sin rayones visibles. Poco uso o restaurada por completo. Lo mejor que hay.</p></article>
+      <article class="grade-card" data-g="A"><span class="big">A</span><h3>Muy buena</h3><p>Micro rayones que no se ven a distancia normal. Pantalla y botones impecables.</p></article>
+      <article class="grade-card" data-g="B"><span class="big">B</span><h3>Buena</h3><p>Marcas de uso visibles en la carcasa. La pantalla sin rayones. Mejor precio.</p></article>
+      <article class="grade-card" data-g="C"><span class="big">C</span><h3>Con marcas</h3><p>Uso evidente o detalles estéticos declarados en la publicación. Funciona perfecto.</p></article>
+    </div>
+  </section>
+
+  <!-- ============ COMPRA SEGURA ============ -->
+  <section class="wrap section" id="segura">
+    <div class="safe">
+      <div class="safe-head">
+        <p class="eyebrow on-dark">Compra segura</p>
+        <h2>Ninguna consola robada pasa por aquí</h2>
+        <p>En El Salvador comprar algo robado es delito aunque no lo sepás (receptación, art. 214-A del Código Penal). Por eso cada consola que compramos queda registrada con el DUI del dueño anterior y su número de serie, y vos recibís un comprobante que prueba que la compraste legalmente.</p>
+        <a class="btn light" href="/procedencia.html">Cómo verificamos cada consola
+          <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <ol class="safe-steps">
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="9" cy="11" r="2.4"/><path d="M5.8 16.5c.6-1.6 1.8-2.4 3.2-2.4s2.6.8 3.2 2.4M14.5 10h4M14.5 13.5h3" stroke-linecap="round"/></svg></span><h3>Dueño identificado</h3><p>Solo compramos a personas que presentan su DUI o carné de residente original.</p></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7V5h3M17 5h3v2M20 17v2h-3M7 19H4v-2"/><path d="M8 9v6M11 9v6M14 9v6M17 9v6"/></svg></span><h3>Serie registrada</h3><p>Anotamos el número de serie. Si está borrado o alterado, no la compramos.</p></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h4" stroke-linecap="round"/></svg></span><h3>Acta firmada</h3><p>El vendedor firma una declaración de que la consola es suya y de procedencia lícita.</p></li>
+        <li><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 3 4.5 6v6c0 4.4 3.1 8.2 7.5 9 4.4-.8 7.5-4.6 7.5-9V6L12 3Z"/><path d="m9 12 2.2 2.2L15.5 10" stroke-linecap="round"/></svg></span><h3>Comprobante para vos</h3><p>Te llevás un comprobante con la serie, la fecha y la garantía: tu respaldo legal.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ============ VENDER ============ -->
+  <section class="wrap section" id="vender">
+    <div class="sell">
+      <div class="sell-side">
+        <p class="eyebrow on-dark">Vendenos tu consola</p>
+        <h2>Te la cotizamos<br>en menos de 24 h</h2>
+        <p>Mandanos fotos y contanos qué tenés. Te respondemos con un precio; si aceptás, la revisamos juntos, firmamos el acta de compra y te pagamos en el momento.</p>
+        <ol class="mini-steps">
+          <li><span>1</span>Subís fotos y datos</li>
+          <li><span>2</span>Te cotizamos por aquí y por correo</li>
+          <li><span>3</span>Nos vemos con tu DUI, la probamos y te pagamos</li>
+        </ol>
+      </div>
+      <form id="sellForm" class="sell-form" novalidate>
+        <label class="drop" id="drop" for="sPhotos">
+          <input id="sPhotos" type="file" accept="image/*" multiple>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><circle cx="12" cy="12" r="3.2"/><path d="M8 5l1.5-2h5L16 5"/></svg>
+          <strong>Agregá hasta 4 fotos</strong>
+          <span>Tocá o arrastrá aquí · encendida, de frente y de atrás</span>
+        </label>
+        <div class="thumbs" id="photoThumbs"></div>
         <div class="form-grid">
           <div class="form-field full">
             <label for="sTitle">¿Qué querés vender?</label>
@@ -188,109 +246,142 @@
             <select id="sCat"><option>PlayStation</option><option>Xbox</option><option>Nintendo</option><option>Portátil</option><option>Retro</option><option>Accesorios</option></select>
           </div>
           <div class="form-field">
-            <label for="sPrice">Cuánto esperás recibir (US$)</label>
+            <label for="sPrice">Cuánto esperás (US$)</label>
             <input id="sPrice" type="number" min="5" step="1" placeholder="250" required>
           </div>
           <div class="form-field">
             <label for="sGrade">Estado</label>
-            <select id="sGrade"><option value="S">S — como nueva</option><option value="A" selected>A — muy buena</option><option value="B">B — buena</option><option value="C">C — con marcas de uso</option></select>
+            <select id="sGrade"><option value="S">S — como nueva</option><option value="A" selected>A — muy buena</option><option value="B">B — buena</option><option value="C">C — con marcas</option></select>
           </div>
           <div class="form-field">
             <label for="sLoc">Tu departamento</label>
             <select id="sLoc" data-deptos></select>
           </div>
-          <div class="form-field full">
-            <label for="sDesc">Qué incluye y en qué estado está</label>
-            <textarea id="sDesc" rows="3" placeholder="Controles, cables, caja original, juegos incluidos, detalles de uso…"></textarea>
+          <div class="form-field">
+            <label for="sSerie">Número de serie</label>
+            <input id="sSerie" placeholder="Viene en la etiqueta de abajo o atrás" autocomplete="off">
+          </div>
+          <div class="form-field">
+            <label for="sOrigen">¿Qué respaldo tenés?</label>
+            <select id="sOrigen">
+              <option value="Factura y caja original">Factura y caja original</option>
+              <option value="Factura">Factura</option>
+              <option value="Caja original con la misma serie" selected>Caja original con la misma serie</option>
+              <option value="Ninguno">Ninguno (me la regalaron / la perdí)</option>
+            </select>
           </div>
           <div class="form-field full">
-            <button class="btn block" type="submit">Enviar oferta a Ttoms</button>
-            <p class="hint" style="margin-top:8px">Necesitás una cuenta para darle seguimiento a tu oferta.</p>
+            <label for="sTel">Tu WhatsApp (opcional, para responderte más rápido)</label>
+            <input id="sTel" type="tel" inputmode="numeric" placeholder="7000-0000" autocomplete="tel-national">
+          </div>
+          <div class="form-field full">
+            <label for="sDesc">Qué incluye y en qué estado está</label>
+            <textarea id="sDesc" rows="3" placeholder="Controles, cables, caja, juegos incluidos, detalles de uso…"></textarea>
+          </div>
+          <div class="form-field full">
+            <label class="check">
+              <input type="checkbox" id="sDecl">
+              <span>Declaro que soy el dueño legítimo de esta consola, que no es robada, no está empeñada ni reportada, y que el día de la venta presentaré mi DUI original. Acepto la <a href="/procedencia.html" target="_blank" rel="noopener">política de procedencia lícita</a>.</span>
+            </label>
+          </div>
+          <div class="form-field full">
+            <button class="btn block lg" type="submit">Enviar oferta
+              <svg class="arr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+            <p class="hint" style="margin-top:8px; text-align:center">Vas a poder ver el estado de tu oferta en Mi cuenta.</p>
           </div>
         </div>
       </form>
     </div>
   </section>
 
-  <section class="alerts wrap">
-    <div class="alerts-box">
+  <!-- ============ CÓMO FUNCIONA (PESTAÑAS) ============ -->
+  <section class="wrap section" id="como">
+    <div class="sec-head">
       <div>
-        <p class="eyebrow">Alertas por correo</p>
-        <h2 style="font-size:25px; margin-top:6px">Enterate cuando entre consola nueva</h2>
-        <p style="color:var(--ink-2); margin-top:10px; font-size:15.5px; max-width:44ch">Las consolas buenas se van en horas. Activá las alertas y te llega un correo apenas publicamos algo que encaje con lo que buscás.</p>
+        <p class="eyebrow">Cómo funciona</p>
+        <h2>Simple, de principio a fin</h2>
       </div>
-      <div>
-        <form class="sub-form" id="subForm">
-          <input id="subEmail" type="email" placeholder="tucorreo@ejemplo.com" aria-label="Tu correo" autocomplete="email">
-          <button class="btn" type="submit">Activar alertas</button>
-        </form>
-        <p class="hint" style="margin-top:10px">Un correo por publicación nueva, como máximo uno al día. Podés elegir qué recibir y darte de baja desde tu cuenta.</p>
+      <div class="seg small" id="howTabs" role="tablist" aria-label="Recorrido">
+        <span class="seg-glide" id="howGlide" aria-hidden="true"></span>
+        <button type="button" role="tab" aria-selected="true" data-how="comprar">Comprar</button>
+        <button type="button" role="tab" aria-selected="false" data-how="vender">Vender</button>
       </div>
     </div>
+    <ol class="steps" id="howComprar">
+      <li><span class="n">01</span><h3>La pedís</h3><p>Por WhatsApp o desde la web, en un minuto. Te confirmamos al instante.</p></li>
+      <li><span class="n">02</span><h3>Nos vemos</h3><p>El mismo día o el siguiente, en el punto de San Salvador que te quede mejor.</p></li>
+      <li><span class="n">03</span><h3>La probás</h3><p>Enciende, corre un juego, revisás controles, serie y accesorios con calma.</p></li>
+      <li><span class="n">04</span><h3>Pagás y te la llevás</h3><p>Efectivo o transferencia. Te damos comprobante con serie y garantía.</p></li>
+    </ol>
+    <ol class="steps" id="howVender" hidden>
+      <li><span class="n">01</span><h3>Nos mandás fotos</h3><p>Desde “Vendé la tuya”, con lo que incluye y el precio que esperás.</p></li>
+      <li><span class="n">02</span><h3>Te cotizamos</h3><p>En menos de 24 h te respondemos con un precio o una contraoferta.</p></li>
+      <li><span class="n">03</span><h3>La revisamos</h3><p>Nos vemos en un punto de San Salvador con tu DUI y la probamos juntos.</p></li>
+      <li><span class="n">04</span><h3>Te pagamos</h3><p>Firmás el acta de compra y te pagamos en efectivo o transferencia al momento.</p></li>
+    </ol>
   </section>
 
-  <section class="wrap" id="entregas" style="padding-block:14px 40px">
-    <div class="sec-head"><div><h2>Dónde entregamos</h2><p>Estamos en San Salvador. Elegís el punto que te quede mejor al apartar la consola.</p></div></div>
+  <!-- ============ ENTREGAS ============ -->
+  <section class="wrap section" id="entregas">
+    <div class="sec-head">
+      <div>
+        <p class="eyebrow">Entregas</p>
+        <h2>Nos vemos en San Salvador</h2>
+        <p class="sub">Lugares conocidos y concurridos. Elegís el que te quede mejor al pedirla.</p>
+      </div>
+    </div>
     <div class="places">
       <ul class="place-list" id="placeList"></ul>
       <div class="place-note">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"><path d="M3 12h13M12 7l5 5-5 5" stroke-linecap="round"/><path d="M20 4v16" stroke-linecap="round"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h13M12 7l5 5-5 5"/><path d="M20 4v16"/></svg>
         <div><strong>¿Estás fuera de San Salvador?</strong><p id="fueraTxt">Coordinamos la entrega por chat.</p></div>
       </div>
     </div>
   </section>
 
-  <section class="wrap" id="resenas" style="padding-block:14px 40px">
+  <!-- ============ RESEÑAS ============ -->
+  <section class="wrap section" id="resenas">
     <div class="reviews">
       <div class="reviews-side">
         <p class="eyebrow">Reseñas</p>
-        <h2 style="font-size:27px; margin-top:6px">Lo que dicen quienes ya compraron</h2>
+        <h2>Lo que dicen quienes ya compraron</h2>
         <div class="score" id="scoreBox"></div>
-        <p class="hint" style="margin-top:12px">Las reseñas con la marca <b>Compra verificada</b> son de personas con una entrega confirmada en el sistema. Nadie puede ponerse esa marca a mano.</p>
-        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:18px">
-          <button class="btn sm" type="button" id="writeReview">Dejar mi reseña</button>
-          <a class="btn ghost sm" id="igEntregas" href="#" target="_blank" rel="noopener">Ver entregas en Instagram</a>
+        <p class="hint" style="margin-top:12px">Las reseñas con <b>Compra verificada</b> son de personas con una entrega confirmada en el sistema. Esa marca no se puede poner a mano.</p>
+        <div class="row-btns">
+          <button class="btn" type="button" id="writeReview">Dejar mi reseña</button>
+          <a class="btn ghost" id="igEntregas" href="#" target="_blank" rel="noopener">Ver entregas en Instagram</a>
         </div>
       </div>
       <div class="review-list" id="reviewList"></div>
     </div>
   </section>
 
-  <section class="wrap" id="como" style="padding-block:14px 10px">
-    <div class="sec-head"><div><h2>Cómo funciona</h2><p>Dos recorridos: uno para comprar y otro para vendernos tu consola.</p></div></div>
-    <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(220px,1fr))">
-      <div class="card" style="cursor:default; padding:20px; gap:8px">
-        <span class="eyebrow">Comprar · 01</span>
-        <h3 style="font-size:16.5px">Elegís y apartás</h3>
-        <p style="font-size:14px; color:var(--ink-2)">Cada publicación trae estado real, accesorios incluidos y fotos de la consola encendida. Apartar no cuesta nada.</p>
+  <!-- ============ ALERTAS ============ -->
+  <section class="wrap section">
+    <div class="alerts-box">
+      <div>
+        <p class="eyebrow on-dark">Alertas por correo</p>
+        <h2>Enterate primero cuando entre algo bueno</h2>
       </div>
-      <div class="card" style="cursor:default; padding:20px; gap:8px">
-        <span class="eyebrow">Comprar · 02</span>
-        <h3 style="font-size:16.5px">Coordinamos la entrega</h3>
-        <p style="font-size:14px; color:var(--ink-2)">Por chat acordamos día, hora y punto en San Salvador. La probás frente a nosotros y pagás si estás conforme.</p>
-      </div>
-      <div class="card" style="cursor:default; padding:20px; gap:8px">
-        <span class="eyebrow">Vender · 01</span>
-        <h3 style="font-size:16.5px">Nos mandás tu oferta</h3>
-        <p style="font-size:14px; color:var(--ink-2)">Describís la consola y el precio que esperás. Queda registrada en tu cuenta con su estado.</p>
-      </div>
-      <div class="card" style="cursor:default; padding:20px; gap:8px">
-        <span class="eyebrow">Vender · 02</span>
-        <h3 style="font-size:16.5px">Te cotizamos y pagamos</h3>
-        <p style="font-size:14px; color:var(--ink-2)">Respondemos con un precio o una contraoferta. Si aceptás, revisamos la consola y te pagamos el mismo día.</p>
-      </div>
+      <form class="sub-form" id="subForm">
+        <input id="subEmail" type="email" placeholder="tucorreo@ejemplo.com" aria-label="Tu correo" autocomplete="email">
+        <button class="btn amber" type="submit">Activar</button>
+      </form>
     </div>
   </section>
 
-  <section class="faq wrap" id="faq">
-    <div class="sec-head"><div><h2>Preguntas frecuentes</h2><p>Lo que más nos consultan antes de la primera compra.</p></div></div>
-    <details open><summary>¿Las consolas son nuevas o usadas?</summary><p>La mayoría son usadas, revisadas y limpiadas por nosotros, y algunas llegan selladas. Cada publicación indica el grado real: S como nueva, A muy buena, B buena y C con marcas visibles de uso. Nunca subimos el grado para vender más rápido.</p></details>
-    <details><summary>¿Tengo que pagar por adelantado?</summary><p>No, en las entregas en San Salvador. Apartás la consola desde el sitio, nos vemos en el punto que elegiste, la probás y pagás en efectivo o transferencia ahí mismo. Si no te convence, no la llevás.</p></details>
-    <details><summary>¿Quiénes son ustedes?</summary><p>Somos dos personas en San Salvador que compran, revisan y venden consolas. Publicamos las entregas en nuestro Instagram para que veas con quién estás tratando, y las reseñas de este sitio son de clientes reales.</p></details>
-    <details><summary>¿Cómo funciona la garantía de 15 días?</summary><p>Cubre fallas de encendido, de lectora y de los controles incluidos. No cubre daños por golpes, líquidos ni por abrir la consola. Si falla, la revisamos y la reparamos, la cambiamos o te devolvemos el dinero.</p></details>
-    <details><summary>¿Cuánto me pagan por mi consola?</summary><p>Depende del modelo, el estado y lo que incluya. Enviá la oferta desde la sección de venta y te respondemos con un precio en menos de 24 horas. Si no te convence, podés contraofertar por chat sin ningún compromiso.</p></details>
-    <details><summary>¿Entregan fuera de San Salvador?</summary><p>Sí, pero se coordina caso por caso por el chat: podemos vernos en un punto intermedio o mandarla por encomienda. En envíos, la forma de pago y el costo se acuerdan por chat antes de despachar.</p></details>
-    <details><summary>¿Cada cuánto me llegan correos?</summary><p>Solo los que activés en tu cuenta: publicaciones nuevas, bajadas de precio, respuestas a tus ofertas de venta o el resumen semanal. Podés cambiarlos o desactivarlos todos cuando querás desde Mi cuenta.</p></details>
+  <!-- ============ FAQ ============ -->
+  <section class="wrap section" id="faq">
+    <div class="sec-head"><div><p class="eyebrow">Ayuda</p><h2>Preguntas frecuentes</h2></div></div>
+    <div class="faq">
+      <details open><summary>¿Tengo que pagar por adelantado?</summary><p>No, en las entregas en San Salvador. Pedís la consola por WhatsApp o desde la web, nos vemos en el punto que elegiste, la probás y pagás en efectivo o transferencia ahí mismo. Si no te convence, no la llevás.</p></details>
+      <details><summary>¿Cómo sé que la consola no es robada?</summary><p>Cada consola que compramos queda registrada en un acta con el DUI del dueño anterior, su número de serie y su declaración firmada de que es suya. Al comprar te damos un comprobante con esa serie: es tu respaldo de que la adquiriste de buena fe. Si la serie está borrada o alterada, no la compramos. <a href="/procedencia.html">Leé la política completa</a>.</p></details>
+      <details><summary>¿Quiénes son ustedes?</summary><p>Somos dos personas en San Salvador que compran, revisan y venden consolas. Publicamos las entregas en nuestro Instagram para que veás con quién estás tratando, y las reseñas de este sitio son de clientes reales.</p></details>
+      <details><summary>¿Cómo funciona la garantía de 15 días?</summary><p>Cubre fallas de encendido, de lectora y de los controles incluidos durante 15 días desde la entrega. No cubre daños por golpes, líquidos ni por abrir la consola. Si falla, la revisamos y la reparamos, la cambiamos o te devolvemos el dinero. Detalles en los <a href="/terminos.html#garantia">términos</a>.</p></details>
+      <details><summary>¿Cuánto me pagan por mi consola?</summary><p>Depende del modelo, el estado y lo que incluya. Mandanos fotos desde “Vendé la tuya” y te respondemos con un precio en menos de 24 horas. Si no te convence, podés contraofertar por chat sin compromiso. El día de la compra necesitás tu DUI original.</p></details>
+      <details><summary>¿Entregan fuera de San Salvador?</summary><p>Sí, pero se coordina caso por caso por el chat: un punto intermedio o por encomienda. En envíos, la forma de pago y el costo se acuerdan antes de despachar.</p></details>
+      <details><summary>¿Cada cuánto me llegan correos?</summary><p>La confirmación de tu pedido y tu comprobante siempre te llegan. Los avisos son opcionales: publicaciones nuevas, bajadas de precio y respuestas a tus ofertas. Los cambiás o apagás cuando querás desde Mi cuenta.</p></details>
+    </div>
   </section>
 </main>
 
@@ -298,44 +389,67 @@
   <div class="wrap">
     <div class="foot">
       <div>
-        <a class="brand" href="#top" style="margin-bottom:4px">
+        <a class="brand" href="#top">
           <svg class="mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-            <rect x="1.2" y="1.2" width="29.6" height="29.6" rx="9" stroke="currentColor" stroke-width="1.6" style="color:var(--accent)"/>
-            <path d="M8 11h11M13.5 11v11" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" style="color:var(--accent)"/>
-            <circle cx="22" cy="20" r="2.4" fill="currentColor" style="color:var(--signal)"/>
+            <rect x="1" y="1" width="30" height="30" rx="9" fill="var(--mint)"/>
+            <path d="M8 11h11M13.5 11v11" stroke="var(--night)" stroke-width="2.6" stroke-linecap="round"/>
+            <circle cx="22.5" cy="20" r="2.6" fill="var(--amber)"/>
           </svg>
-          <b>Ttoms</b><span>SV</span>
+          <b>Ttoms</b>
         </a>
-        <p>Compra y venta de consolas y accesorios en El Salvador, con pago protegido y entrega acordada por chat.</p>
+        <p>Compra y venta de consolas y accesorios en San Salvador. La probás antes de pagar.</p>
         <div class="socials" id="socials"></div>
       </div>
-      <div><h4>Comprar</h4><ul>
+      <div><h4>Tienda</h4><ul>
         <li><a href="#catalogo">Todo el catálogo</a></li>
-        <li><a href="#catalogo">PlayStation</a></li>
-        <li><a href="#catalogo">Nintendo</a></li>
-        <li><a href="#catalogo">Retro</a></li>
+        <li><a href="#consolas">Por consola</a></li>
+        <li><a href="#grados">Grados</a></li>
       </ul></div>
       <div><h4>Vender</h4><ul>
         <li><a href="#vender">Enviar oferta</a></li>
         <li><a href="#como">Cómo cotizamos</a></li>
-        <li><a href="#faq">Qué consolas recibimos</a></li>
+        <li><a href="#entregas">Puntos de entrega</a></li>
       </ul></div>
-      <div><h4>Cuenta y soporte</h4><ul>
+      <div><h4>Cuenta</h4><ul>
         <li><a href="#" data-open="auth">Crear cuenta</a></li>
         <li><a href="#" data-open="account">Mi cuenta</a></li>
-        <li><a href="#faq">Centro de ayuda</a></li>
-        <li><a href="#faq">Garantía y devoluciones</a></li>
+        <li><a href="#faq">Ayuda</a></li>
+      </ul></div>
+      <div><h4>Legal</h4><ul>
+        <li><a href="/terminos.html">Términos y condiciones</a></li>
+        <li><a href="/privacidad.html">Privacidad de datos</a></li>
+        <li><a href="/procedencia.html">Procedencia lícita</a></li>
+        <li><a href="/terminos.html#garantia">Garantía y devoluciones</a></li>
       </ul></div>
     </div>
     <div class="legal">
       <span>© <span id="year">2026</span> Ttoms · <span id="ciudad">San Salvador, El Salvador</span></span>
-      <span>Precios en dólares estadounidenses (USD)</span>
+      <span id="idLegal"></span>
+      <span>Precios en dólares (USD)</span>
     </div>
   </div>
 </footer>
 
+<!-- ============ WHATSAPP FLOTANTE ============ -->
+<div class="wa-float" id="waFloat" hidden>
+  <div class="wa-menu" id="waMenu" hidden></div>
+  <button class="wa-btn" type="button" id="waBtn" aria-expanded="false" aria-controls="waMenu">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.2a9.8 9.8 0 0 0-8.4 14.8L2.2 21.8l4.9-1.3A9.8 9.8 0 1 0 12 2.2Zm0 17.9a8 8 0 0 1-4.1-1.1l-.3-.2-2.9.8.8-2.8-.2-.3A8.1 8.1 0 1 1 12 20.1Zm4.5-6c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.6 6.6 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.5 1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"/></svg>
+    <span class="wa-lbl">Escribinos</span>
+  </button>
+</div>
+
+<!-- ============ BARRA INFERIOR (CELULAR) ============ -->
+<nav class="bottom-nav" id="bottomNav" aria-label="Navegación rápida">
+  <a href="#top" data-spy="top"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z"/></svg><span>Inicio</span></a>
+  <a href="#catalogo" data-spy="catalogo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M4 7h16l-1.5 12h-13z"/><path d="M9 7a3 3 0 0 1 6 0" stroke-linecap="round"/></svg><span>Tienda</span></a>
+  <a href="#vender" data-spy="vender"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg><span>Vender</span></a>
+  <button type="button" id="chatBtnMobile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-12.3 7.6L3 20.5l1.5-5.2A8.5 8.5 0 1 1 21 11.5Z"/></svg><span>Chat</span><i class="dot" id="chatDotMobile" hidden></i></button>
+  <button type="button" id="accountBtnMobile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.6"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/></svg><span>Cuenta</span></button>
+</nav>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script src="assets/config.js"></script>
-<script src="assets/app.js"></script>
+<script src="/assets/config.js"></script>
+<script src="/assets/app.js"></script>
 </body>
 </html>

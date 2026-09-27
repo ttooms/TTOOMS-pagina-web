@@ -1,0 +1,8 @@
+# El sitio vive en la carpeta ttoms/. Este archivo le dice a Netlify
+# dónde buscarlo si en la configuración del proyecto no se puso
+# "Base directory = ttoms". La configuración completa está en ttoms/netlify.toml.
+[build]
+  base = "ttoms"
+  publish = "."
+  command = ""
+  edge_functions = "netlify/edge-functions"
